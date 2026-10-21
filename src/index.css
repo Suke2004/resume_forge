@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Fraunces', Georgia, Cambria, serif;
+    --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+
+  html,
+  body {
+    font-family: var(--font-sans);
+    background-color: #F6F4EE;
+    color: #141817;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .font-editorial {
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
+  }
+
+  code,
+  pre,
+  textarea.font-mono,
+  .font-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.resume-paper-shadow {
+  box-shadow:
+    0 2px 8px rgba(20, 24, 23, 0.06),
+    0 20px 44px -8px rgba(20, 24, 23, 0.12),
+    0 0 0 1px rgba(20, 24, 23, 0.08);
+}
+
+.studio-desk-canvas {
+  background-color: #EAE6DC;
+  background-image: radial-gradient(#C8C2B4 0.9px, transparent 0.9px);
+  background-size: 16px 16px;
+}
+
+.atelier-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E0D5;
+  box-shadow: 0 1px 3px rgba(20, 24, 23, 0.03), 0 6px 16px -4px rgba(20, 24, 23, 0.04);
+}
+
+.sheet-zoom-80 {
+  font-size: 8.5px;
+}
+
+.sheet-zoom-90 {
+  font-size: 9.5px;
+}
+
+.sheet-zoom-100 {
+  font-size: 10.5px;
+}
+
+.sheet-zoom-110 {
+  font-size: 11.5px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes atelier-progress-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(20%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+.atelier-progress-bar {
+  width: 45%;
+  animation: atelier-progress-sweep 1.25s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

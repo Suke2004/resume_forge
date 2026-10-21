@@ -1,0 +1,6 @@
+{
+  "name": "LaTeXForge — One-Page AI Resume Atelier",
+  "description": "Tailor, validate, and compile strict one-page LaTeX resumes with AI job-description calibration, manual project locking, and Supabase persistence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,110 @@
+// Prisma Schema for Neon PostgreSQL Deployment
+// Supports Project Catalogue, 4-Stage Skills (with Stage 4 exclusion), Versioned LaTeX Templates,
+// and Authoritative Resume Versions with SHA-256 Source Hash Verification.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ProjectDomain {
+  software
+  hardware
+  hybrid
+}
+
+enum JobStatus {
+  QUEUED
+  ANALYZING
+  DRAFT_READY
+  RENDERING
+  COMPILING
+  VALIDATING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model Project {
+  id                String        @id @default(cuid())
+  userId            String
+  title             String
+  sourceDescription String        @db.Text // Reference material for AI only; never inserted as paragraph
+  verifiedFacts     String[]
+  defaultBullets    String[]
+  domain            ProjectDomain @default(software)
+  technologies      String[]
+  keywords          String[]
+  githubUrl         String?       // Optional; omitted cleanly in LaTeX if null/empty
+  priority          Int           @default(1)
+  metrics           String[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([userId, domain])
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  category  String
+  stage     Int      // 1, 2, 3 included in resume; 4 strictly excluded across all layers
+  verified  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, stage])
+}
+
+model LatexTemplate {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  version       Int      @default(1)
+  latexSource   String   @db.Text
+  sectionConfig Json
+  spacingConfig Json
+  history       Json
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ResumeVersion {
+  id                       String    @id @default(cuid())
+  userId                   String
+  versionNumber            Int
+  parentVersionId          String?
+  company                  String
+  role                     String
+  jobDescription           String    @db.Text
+  roleMode                 String    @default("all")
+  jobStatus                JobStatus @default(DRAFT_READY)
+  templateId               String
+  templateVersion          Int
+  aiRecommendations        Json      // Suggestions only; never overwrites selectedProjectIds
+  selectedProjectIds       String[]  // Authoritative ordered selection
+  manuallyLockedProjectIds String[]  // Locked projects protected from automatic removal
+  projectBulletsMap        Json
+  bulletSurgeonHistory     Json
+  selectedSkillIds         String[]  // Validated Stages 1-3 only
+  jobAnalysis              Json?
+  pageFitAnalysis          Json?
+  aiGeneratedLatex         String    @db.Text
+  savedLatexSource         String    @db.Text
+  savedSourceHash          String
+  isUserEdited             Boolean   @default(false)
+  compiledSourceHash       String?
+  isPdfStale               Boolean   @default(true)
+  compilationResult        Json?
+  auditLog                 Json
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  @@index([userId, versionNumber])
+}
